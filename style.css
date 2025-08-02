@@ -28,6 +28,7 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease, border-color 0.3s ease;
   flex-shrink: 0;
+  z-index: 100;
 }
 
 .header h1 {
@@ -70,10 +71,12 @@ body {
 .chat-container {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 12px;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
   min-height: 0;
+  height: 0; /* Force flex to calculate height properly */
 }
 
 /* Message bubbles */
@@ -449,6 +452,11 @@ body.dark-theme .bot blockquote {
 
 /* Small Mobile Devices */
 @media (max-width: 480px) {
+  body {
+    height: 100vh;
+    overflow: hidden;
+  }
+
   .header {
     padding: 10px 12px;
   }
@@ -464,6 +472,11 @@ body.dark-theme .bot blockquote {
 
   .chat-container {
     padding: 8px;
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    height: 0;
+    min-height: 0;
   }
 
   .message {
@@ -479,6 +492,8 @@ body.dark-theme .bot blockquote {
     min-height: 56px;
     position: sticky;
     bottom: 0;
+    background: white;
+    z-index: 100;
   }
 
   .input-area input {
