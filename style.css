@@ -455,6 +455,7 @@ body.dark-theme .bot blockquote {
   body {
     height: 100vh;
     overflow: hidden;
+    font-size: 16px;size
   }
 
   .header {
