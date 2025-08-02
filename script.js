@@ -1,6 +1,13 @@
 const chatContainer = document.getElementById("chat-container");
 const userInput = document.getElementById("user-input");
 
+// Local storage keys
+const STORAGE_KEY = "puter_chat_history";
+const THEME_KEY = "puter_chat_theme";
+
+// Chat history array
+let chatHistory = [];
+
 // Theme toggle functionality
 function toggleTheme() {
   const body = document.body;
@@ -12,18 +19,18 @@ function toggleTheme() {
     body.classList.remove("dark-theme");
     icon.textContent = "🌙";
     text.textContent = "Dark";
-    localStorage.setItem("theme", "light");
+    localStorage.setItem(THEME_KEY, "light");
   } else {
     body.classList.add("dark-theme");
     icon.textContent = "☀️";
     text.textContent = "Light";
-    localStorage.setItem("theme", "dark");
+    localStorage.setItem(THEME_KEY, "dark");
   }
 }
 
 // Load saved theme on page load
 function loadTheme() {
-  const savedTheme = localStorage.getItem("theme");
+  const savedTheme = localStorage.getItem(THEME_KEY);
   const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
 
   if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
@@ -36,8 +43,79 @@ function loadTheme() {
   }
 }
 
-// Initialize theme on page load
-document.addEventListener("DOMContentLoaded", loadTheme);
+// Save chat history to local storage
+function saveChatHistory() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(chatHistory));
+  } catch (error) {
+    console.warn("Failed to save chat history:", error);
+  }
+}
+
+// Load chat history from local storage
+function loadChatHistory() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      chatHistory = JSON.parse(saved);
+      return true;
+    }
+  } catch (error) {
+    console.warn("Failed to load chat history:", error);
+  }
+  return false;
+}
+
+// Clear chat function
+function clearChat() {
+  if (
+    confirm(
+      "Are you sure you want to clear the chat history? This action cannot be undone."
+    )
+  ) {
+    chatHistory = [];
+    chatContainer.innerHTML = "";
+    saveChatHistory();
+
+    // Show confirmation message
+    const confirmation = createMessageElement("bot");
+    confirmation.innerHTML = "Chat history cleared successfully! 🗑️";
+    confirmation.style.opacity = "0.7";
+    confirmation.style.fontStyle = "italic";
+
+    // Remove confirmation message after 3 seconds
+    setTimeout(() => {
+      if (confirmation.parentNode) {
+        confirmation.remove();
+      }
+    }, 3000);
+  }
+}
+
+// Initialize theme and load chat history on page load
+document.addEventListener("DOMContentLoaded", function () {
+  loadTheme();
+  loadChatHistory();
+
+  // Restore chat history to UI
+  if (chatHistory.length > 0) {
+    chatHistory.forEach((message) => {
+      const messageElement = createMessageElement(message.sender);
+      messageElement.innerHTML = message.content;
+    });
+    scrollToBottom();
+  }
+});
+
+// Prevent page refresh/close without warning if there's chat history
+window.addEventListener("beforeunload", function (e) {
+  if (chatHistory.length > 0) {
+    e.preventDefault();
+    e.returnValue =
+      "You have unsaved chat history. Are you sure you want to leave?";
+    return e.returnValue;
+  }
+});
 
 function createMessageElement(sender) {
   const div = document.createElement("div");
@@ -80,6 +158,15 @@ async function handleSend() {
   // Create user message
   const userMsg = createMessageElement("user");
   userMsg.innerText = input;
+
+  // Save user message to history
+  chatHistory.push({
+    sender: "user",
+    content: input,
+    timestamp: new Date().toISOString(),
+  });
+  saveChatHistory();
+
   userInput.value = "";
 
   // Create typing indicator first
@@ -109,12 +196,29 @@ async function handleSend() {
       }
     }
 
+    // Save bot message to history
+    chatHistory.push({
+      sender: "bot",
+      content: fullReply,
+      timestamp: new Date().toISOString(),
+    });
+    saveChatHistory();
+
     // Final scroll to ensure the complete message is visible
     setTimeout(() => {
       smoothScrollToBottom();
     }, 100);
   } catch (err) {
     botTyping.innerHTML = `<b>Error:</b> ${err.message}`;
+
+    // Save error message to history
+    chatHistory.push({
+      sender: "bot",
+      content: `<b>Error:</b> ${err.message}`,
+      timestamp: new Date().toISOString(),
+    });
+    saveChatHistory();
+
     scrollToBottom();
   }
 }
