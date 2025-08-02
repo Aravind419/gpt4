@@ -477,6 +477,7 @@ body.dark-theme .bot blockquote {
     -webkit-overflow-scrolling: touch;
     height: 0;
     min-height: 0;
+    padding-bottom: 20px; /* Extra padding at bottom for better visibility */
   }
 
   .message {
@@ -484,6 +485,10 @@ body.dark-theme .bot blockquote {
     padding: 10px 12px;
     margin: 6px 0;
     font-size: 14px;
+  }
+
+  .message:last-child {
+    margin-bottom: 20px; /* Extra margin for last message */
   }
 
   .input-area {
@@ -494,6 +499,7 @@ body.dark-theme .bot blockquote {
     bottom: 0;
     background: white;
     z-index: 100;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); /* Add shadow to separate from chat */
   }
 
   .input-area input {
@@ -512,6 +518,19 @@ body.dark-theme .bot blockquote {
   .bot pre {
     font-size: 13px;
     padding: 10px;
+    margin-bottom: 8px; /* Extra margin for code blocks */
+  }
+
+  /* Ensure bot messages have proper spacing */
+  .bot {
+    margin-bottom: 12px;
+  }
+
+  /* Add extra space after long content */
+  .bot p:last-child,
+  .bot ul:last-child,
+  .bot ol:last-child {
+    margin-bottom: 8px;
   }
 }
 

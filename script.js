@@ -44,8 +44,33 @@ function createMessageElement(sender) {
   div.classList.add("message", sender);
   div.innerHTML = "";
   chatContainer.appendChild(div);
-  chatContainer.scrollTop = chatContainer.scrollHeight;
+  scrollToBottom();
   return div;
+}
+
+// Improved scroll function that ensures messages are visible
+function scrollToBottom() {
+  // Use setTimeout to ensure DOM updates are complete
+  setTimeout(() => {
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+
+    // For mobile, add extra padding to ensure content is visible above input
+    const isMobile = window.innerWidth <= 480;
+    if (isMobile) {
+      // Add a small delay to ensure smooth scrolling
+      setTimeout(() => {
+        chatContainer.scrollTop = chatContainer.scrollHeight + 20;
+      }, 50);
+    }
+  }, 10);
+}
+
+// Function to scroll to bottom with smooth animation
+function smoothScrollToBottom() {
+  chatContainer.scrollTo({
+    top: chatContainer.scrollHeight,
+    behavior: "smooth",
+  });
 }
 
 async function handleSend() {
@@ -78,11 +103,19 @@ async function handleSend() {
         fullReply += part.text;
         botMsg.innerHTML = marked.parse(fullReply);
         hljs.highlightAll();
-        chatContainer.scrollTop = chatContainer.scrollHeight;
+
+        // Scroll to bottom after each update to ensure visibility
+        scrollToBottom();
       }
     }
+
+    // Final scroll to ensure the complete message is visible
+    setTimeout(() => {
+      smoothScrollToBottom();
+    }, 100);
   } catch (err) {
     botTyping.innerHTML = `<b>Error:</b> ${err.message}`;
+    scrollToBottom();
   }
 }
 
@@ -91,4 +124,18 @@ userInput.addEventListener("keypress", function (event) {
   if (event.key === "Enter") {
     handleSend();
   }
+});
+
+// Ensure scroll to bottom when input is focused (for mobile)
+userInput.addEventListener("focus", function () {
+  setTimeout(() => {
+    scrollToBottom();
+  }, 100);
+});
+
+// Handle window resize to ensure proper scrolling
+window.addEventListener("resize", function () {
+  setTimeout(() => {
+    scrollToBottom();
+  }, 100);
 });
