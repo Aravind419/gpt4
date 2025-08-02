@@ -484,7 +484,7 @@ body.dark-theme .bot blockquote {
     max-width: 90%;
     padding: 10px 12px;
     margin: 6px 0;
-    font-size: 14px;
+    font-size: 15px;
   }
 
   .message:last-child {
@@ -493,7 +493,7 @@ body.dark-theme .bot blockquote {
 
   .input-area {
     padding: 8px;
-    gap: 8px;
+    gap: 10px;
     min-height: 56px;
     position: sticky;
     bottom: 0;
