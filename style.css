@@ -493,7 +493,7 @@ body.dark-theme .bot blockquote {
 
   .input-area {
     padding: 8px;
-    gap: 6px;
+    gap: 8px;
     min-height: 56px;
     position: sticky;
     bottom: 0;
