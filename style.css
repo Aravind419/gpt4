@@ -303,6 +303,27 @@ body.dark-theme .table-copy-button:hover {
   color: #666;
 }
 
+/* Link styles for bot messages */
+.bot a {
+  color: #007bff;
+  text-decoration: underline;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.bot a:hover {
+  color: #0056b3;
+  text-decoration: none;
+}
+
+.bot a:visited {
+  color: #6f42c1;
+}
+
+.bot a:active {
+  color: #e83e8c;
+}
+
 /* Input area */
 .input-area {
   display: flex;
@@ -456,6 +477,23 @@ body.dark-theme .input-area input:focus {
 body.dark-theme .bot blockquote {
   border-left-color: #555;
   color: #aaa;
+}
+
+/* Dark theme link styles for bot messages */
+body.dark-theme .bot a {
+  color: #4dabf7;
+}
+
+body.dark-theme .bot a:hover {
+  color: #74c0fc;
+}
+
+body.dark-theme .bot a:visited {
+  color: #b197fc;
+}
+
+body.dark-theme .bot a:active {
+  color: #f783ac;
 }
 
 /* Dark theme table styles */

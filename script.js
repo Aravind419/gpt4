@@ -485,6 +485,22 @@ async function handleSend() {
   let fullReply = "";
 
   try {
+    // Build conversation context from chat history (limit to last 10 messages to avoid API limits)
+    let conversationContext = "";
+    if (chatHistory.length > 0) {
+      const recentMessages = chatHistory.slice(-10); // Get last 10 messages
+      conversationContext = recentMessages
+        .map((msg) => {
+          if (msg.sender === "user") {
+            return `User: ${msg.content}`;
+          } else {
+            return `Assistant: ${msg.content}`;
+          }
+        })
+        .join("\n\n");
+      conversationContext += "\n\n";
+    }
+
     // Check if user is asking for table data and modify the prompt
     let modifiedInput = input;
     if (shouldFormatAsTable(input)) {
@@ -494,7 +510,10 @@ async function handleSend() {
     // Add directive to include reference links when appropriate
     modifiedInput = `${modifiedInput}\n\nPlease include relevant reference links and sources when providing information, especially for factual data, statistics, research findings, or technical information. Format references as markdown links at the end of your response.`;
 
-    const response = await puter.ai.chat(modifiedInput, { stream: true });
+    // Send the full conversation context to the AI
+    const fullPrompt =
+      conversationContext + "User: " + modifiedInput + "\n\nAssistant:";
+    const response = await puter.ai.chat(fullPrompt, { stream: true });
 
     // Replace typing indicator with actual bot message container
     const botMsg = document.createElement("div");
