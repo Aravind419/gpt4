@@ -16,13 +16,13 @@ body {
   overflow: hidden;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
-a{
+a {
   text-decoration: none;
   color: #333;
   font-weight: 600;
   font-size: 20px;
   transition: color 0.3s ease;
-  &:hover{
+  &:hover {
     color: #007bff;
   }
 }
@@ -161,6 +161,120 @@ a{
   margin: 8px 0;
   white-space: pre-wrap;
   word-wrap: break-word;
+  position: relative;
+}
+
+/* Table styles */
+.bot table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 12px 0;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.bot table th,
+.bot table td {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.bot table th {
+  background: #f8f9fa;
+  font-weight: 600;
+  color: #333;
+}
+
+.bot table tr:last-child td {
+  border-bottom: none;
+}
+
+.bot table tr:hover {
+  background: #f8f9fa;
+}
+
+/* Copy button styles */
+.copy-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #f0f0f0;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  opacity: 0.7;
+  z-index: 10;
+}
+
+.copy-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.copy-button:active {
+  transform: scale(0.95);
+}
+
+/* Dark theme copy button styles */
+body.dark-theme .copy-button {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #e0e0e0;
+}
+
+body.dark-theme .copy-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Table copy button styles */
+.table-copy-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  color: #333;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  opacity: 0.7;
+  z-index: 10;
+}
+
+.table-copy-button:hover {
+  background: rgba(0, 0, 0, 0.2);
+  border-color: rgba(0, 0, 0, 0.3);
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.table-copy-button:active {
+  transform: scale(0.95);
+}
+
+/* Dark theme table copy button styles */
+body.dark-theme .table-copy-button {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #e0e0e0;
+}
+
+body.dark-theme .table-copy-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 .bot code {
@@ -344,6 +458,26 @@ body.dark-theme .bot blockquote {
   color: #aaa;
 }
 
+/* Dark theme table styles */
+body.dark-theme .bot table {
+  background: #2d2d2d;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-theme .bot table th,
+body.dark-theme .bot table td {
+  border-bottom-color: #404040;
+}
+
+body.dark-theme .bot table th {
+  background: #404040;
+  color: #e0e0e0;
+}
+
+body.dark-theme .bot table tr:hover {
+  background: #404040;
+}
+
 /* Tablet Styles */
 @media (min-width: 768px) {
   .header {
@@ -440,6 +574,20 @@ body.dark-theme .bot blockquote {
   .bot pre {
     font-size: 15px;
     padding: 16px;
+  }
+
+  .copy-button {
+    top: 12px;
+    right: 12px;
+    padding: 6px 10px;
+    font-size: 14px;
+  }
+
+  .table-copy-button {
+    top: 12px;
+    right: 12px;
+    padding: 6px 10px;
+    font-size: 14px;
   }
 }
 
@@ -569,6 +717,20 @@ body.dark-theme .bot blockquote {
     font-size: 13px;
     padding: 10px;
     margin-bottom: 8px; /* Extra margin for code blocks */
+  }
+
+  .copy-button {
+    top: 6px;
+    right: 6px;
+    padding: 3px 6px;
+    font-size: 11px;
+  }
+
+  .table-copy-button {
+    top: 6px;
+    right: 6px;
+    padding: 3px 6px;
+    font-size: 11px;
   }
 
   /* Ensure bot messages have proper spacing */

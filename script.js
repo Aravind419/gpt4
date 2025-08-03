@@ -167,6 +167,214 @@ function sanitizeHTML(html) {
   return tempDiv.innerHTML;
 }
 
+// Function to create copyable code blocks
+function makeCodeBlocksCopyable() {
+  const codeBlocks = document.querySelectorAll("pre code");
+  codeBlocks.forEach((codeBlock, index) => {
+    // Skip if already has copy button
+    if (codeBlock.parentElement.querySelector(".copy-button")) {
+      return;
+    }
+
+    const pre = codeBlock.parentElement;
+    const code = codeBlock.textContent;
+
+    // Create copy button
+    const copyButton = document.createElement("button");
+    copyButton.className = "copy-button";
+    copyButton.innerHTML = "📋";
+    copyButton.title = "Copy code";
+    copyButton.setAttribute("data-code", code);
+
+    // Add click event to copy code
+    copyButton.addEventListener("click", async function () {
+      try {
+        await navigator.clipboard.writeText(code);
+
+        // Show success feedback
+        const originalText = copyButton.innerHTML;
+        copyButton.innerHTML = "✅";
+        copyButton.style.background = "#28a745";
+
+        // Reset button after 2 seconds
+        setTimeout(() => {
+          copyButton.innerHTML = originalText;
+          copyButton.style.background = "";
+        }, 2000);
+      } catch (err) {
+        // Fallback for older browsers
+        const textArea = document.createElement("textarea");
+        textArea.value = code;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+
+        // Show success feedback
+        const originalText = copyButton.innerHTML;
+        copyButton.innerHTML = "✅";
+        copyButton.style.background = "#28a745";
+
+        setTimeout(() => {
+          copyButton.innerHTML = originalText;
+          copyButton.style.background = "";
+        }, 2000);
+      }
+    });
+
+    // Add copy button to pre element
+    pre.style.position = "relative";
+    pre.appendChild(copyButton);
+  });
+}
+
+// Function to create copyable tables
+function makeTablesCopyable() {
+  const tables = document.querySelectorAll("table");
+  tables.forEach((table, index) => {
+    // Skip if already has copy button
+    if (table.querySelector(".table-copy-button")) {
+      return;
+    }
+
+    // Create copy button for table
+    const copyButton = document.createElement("button");
+    copyButton.className = "table-copy-button";
+    copyButton.innerHTML = "📋";
+    copyButton.title = "Copy table";
+    copyButton.setAttribute("data-table-index", index);
+
+    // Add click event to copy table
+    copyButton.addEventListener("click", async function () {
+      try {
+        const tableText = convertTableToText(table);
+        await navigator.clipboard.writeText(tableText);
+
+        // Show success feedback
+        const originalText = copyButton.innerHTML;
+        copyButton.innerHTML = "✅";
+        copyButton.style.background = "#28a745";
+
+        // Reset button after 2 seconds
+        setTimeout(() => {
+          copyButton.innerHTML = originalText;
+          copyButton.style.background = "";
+        }, 2000);
+      } catch (err) {
+        // Fallback for older browsers
+        const tableText = convertTableToText(table);
+        const textArea = document.createElement("textarea");
+        textArea.value = tableText;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+
+        // Show success feedback
+        const originalText = copyButton.innerHTML;
+        copyButton.innerHTML = "✅";
+        copyButton.style.background = "#28a745";
+
+        setTimeout(() => {
+          copyButton.innerHTML = originalText;
+          copyButton.style.background = "";
+        }, 2000);
+      }
+    });
+
+    // Add copy button to table
+    table.style.position = "relative";
+    table.appendChild(copyButton);
+  });
+}
+
+// Function to convert table to formatted text
+function convertTableToText(table) {
+  const rows = table.querySelectorAll("tr");
+  const tableData = [];
+
+  rows.forEach((row) => {
+    const cells = row.querySelectorAll("th, td");
+    const rowData = [];
+    cells.forEach((cell) => {
+      rowData.push(cell.textContent.trim());
+    });
+    tableData.push(rowData);
+  });
+
+  if (tableData.length === 0) return "";
+
+  // Calculate column widths
+  const columnWidths = [];
+  for (let col = 0; col < tableData[0].length; col++) {
+    let maxWidth = 0;
+    for (let row = 0; row < tableData.length; row++) {
+      if (tableData[row][col]) {
+        maxWidth = Math.max(maxWidth, tableData[row][col].length);
+      }
+    }
+    columnWidths.push(maxWidth);
+  }
+
+  // Build the formatted table string
+  let result = "";
+
+  // Add header row
+  if (tableData.length > 0) {
+    result += "|";
+    tableData[0].forEach((cell, col) => {
+      result += ` ${cell.padEnd(columnWidths[col])} |`;
+    });
+    result += "\n";
+
+    // Add separator row
+    result += "|";
+    tableData[0].forEach((_, col) => {
+      result += ` ${"-".repeat(columnWidths[col])} |`;
+    });
+    result += "\n";
+
+    // Add data rows
+    for (let row = 1; row < tableData.length; row++) {
+      result += "|";
+      tableData[row].forEach((cell, col) => {
+        result += ` ${cell.padEnd(columnWidths[col])} |`;
+      });
+      result += "\n";
+    }
+  }
+
+  return result.trim();
+}
+
+// Function to detect if user is asking for table data
+function shouldFormatAsTable(userInput) {
+  const tableKeywords = [
+    "table",
+    "tabular",
+    "data in table",
+    "format as table",
+    "show in table",
+    "list in table",
+    "display as table",
+    "create table",
+    "make table",
+    "table format",
+    "tabular format",
+    "in a table",
+    "as a table",
+  ];
+
+  const lowerInput = userInput.toLowerCase();
+  return tableKeywords.some((keyword) => lowerInput.includes(keyword));
+}
+
+// Function to make all copyable elements (code blocks and tables)
+function makeAllCopyable() {
+  makeCodeBlocksCopyable();
+  makeTablesCopyable();
+}
+
 // Initialize theme and load chat history on page load
 document.addEventListener("DOMContentLoaded", function () {
   loadTheme();
@@ -189,6 +397,8 @@ document.addEventListener("DOMContentLoaded", function () {
             codeBlocks.forEach((block) => {
               hljs.highlightElement(block);
             });
+            // Make code blocks and tables copyable
+            makeAllCopyable();
           }, 10);
         } else {
           // For user messages, just sanitize plain text
@@ -275,7 +485,13 @@ async function handleSend() {
   let fullReply = "";
 
   try {
-    const response = await puter.ai.chat(input, { stream: true });
+    // Check if user is asking for table data and modify the prompt
+    let modifiedInput = input;
+    if (shouldFormatAsTable(input)) {
+      modifiedInput = `${input}\n\nPlease format your response as a markdown table when appropriate.`;
+    }
+
+    const response = await puter.ai.chat(modifiedInput, { stream: true });
 
     // Replace typing indicator with actual bot message container
     const botMsg = document.createElement("div");
@@ -289,6 +505,9 @@ async function handleSend() {
         // Sanitize the content before displaying
         botMsg.innerHTML = sanitizeHTML(marked.parse(fullReply));
         hljs.highlightAll();
+
+        // Make code blocks and tables copyable
+        makeAllCopyable();
 
         // Scroll to bottom after each update to ensure visibility
         scrollToBottom();
