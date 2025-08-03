@@ -478,6 +478,72 @@ body.dark-theme .bot table tr:hover {
   background: #404040;
 }
 
+/* Reference links section styles */
+.bot .references-section {
+  margin-top: 20px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-left: 4px solid #007bff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.bot .references-section h4 {
+  margin: 0 0 12px 0;
+  color: #007bff;
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bot .references-section h4::before {
+  content: "📚";
+  font-size: 18px;
+}
+
+.bot .references-section ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.bot .references-section li {
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+.bot .references-section a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.bot .references-section a:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+/* Dark theme reference links styles */
+body.dark-theme .bot .references-section {
+  background: #2d2d2d;
+  border-left-color: #4dabf7;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-theme .bot .references-section h4 {
+  color: #4dabf7;
+}
+
+body.dark-theme .bot .references-section a {
+  color: #4dabf7;
+}
+
+body.dark-theme .bot .references-section a:hover {
+  color: #74c0fc;
+}
+
 /* Tablet Styles */
 @media (min-width: 768px) {
   .header {
@@ -588,6 +654,15 @@ body.dark-theme .bot table tr:hover {
     right: 12px;
     padding: 6px 10px;
     font-size: 14px;
+  }
+
+  .bot .references-section {
+    padding: 20px;
+    margin-top: 24px;
+  }
+
+  .bot .references-section h4 {
+    font-size: 18px;
   }
 }
 
@@ -731,6 +806,15 @@ body.dark-theme .bot table tr:hover {
     right: 6px;
     padding: 3px 6px;
     font-size: 11px;
+  }
+
+  .bot .references-section {
+    padding: 12px;
+    margin-top: 16px;
+  }
+
+  .bot .references-section h4 {
+    font-size: 14px;
   }
 
   /* Ensure bot messages have proper spacing */

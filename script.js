@@ -491,6 +491,9 @@ async function handleSend() {
       modifiedInput = `${input}\n\nPlease format your response as a markdown table when appropriate.`;
     }
 
+    // Add directive to include reference links when appropriate
+    modifiedInput = `${modifiedInput}\n\nPlease include relevant reference links and sources when providing information, especially for factual data, statistics, research findings, or technical information. Format references as markdown links at the end of your response.`;
+
     const response = await puter.ai.chat(modifiedInput, { stream: true });
 
     // Replace typing indicator with actual bot message container
