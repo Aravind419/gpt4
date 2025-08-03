@@ -1,6 +1,18 @@
 const chatContainer = document.getElementById("chat-container");
 const userInput = document.getElementById("user-input");
 
+// Configure marked.js to prevent XSS and ensure proper code handling
+marked.setOptions({
+  breaks: true,
+  gfm: true,
+  headerIds: false,
+  mangle: false,
+  sanitize: false, // We'll handle sanitization ourselves
+  smartLists: true,
+  smartypants: true,
+  xhtml: false,
+});
+
 // Local storage keys
 const STORAGE_KEY = "puter_chat_history";
 const THEME_KEY = "puter_chat_theme";
@@ -92,6 +104,69 @@ function clearChat() {
   }
 }
 
+// Function to sanitize HTML content and prevent code execution
+function sanitizeHTML(html) {
+  // Create a temporary div to parse the HTML
+  const tempDiv = document.createElement("div");
+  tempDiv.innerHTML = html;
+
+  // Remove any script tags and their content
+  const scripts = tempDiv.querySelectorAll("script");
+  scripts.forEach((script) => script.remove());
+
+  // Remove any event handlers from elements
+  const allElements = tempDiv.querySelectorAll("*");
+  allElements.forEach((element) => {
+    // Remove all event handler attributes
+    const eventAttributes = [
+      "onclick",
+      "onload",
+      "onerror",
+      "onmouseover",
+      "onmouseout",
+      "onfocus",
+      "onblur",
+      "onchange",
+      "onsubmit",
+      "onkeydown",
+      "onkeyup",
+      "onkeypress",
+    ];
+    eventAttributes.forEach((attr) => {
+      if (element.hasAttribute(attr)) {
+        element.removeAttribute(attr);
+      }
+    });
+
+    // Remove javascript: URLs from href and src attributes
+    if (
+      element.hasAttribute("href") &&
+      element.getAttribute("href").toLowerCase().startsWith("javascript:")
+    ) {
+      element.removeAttribute("href");
+    }
+    if (
+      element.hasAttribute("src") &&
+      element.getAttribute("src").toLowerCase().startsWith("javascript:")
+    ) {
+      element.removeAttribute("src");
+    }
+
+    // Ensure code blocks are properly handled
+    if (element.tagName === "PRE" || element.tagName === "CODE") {
+      // Remove any potentially dangerous attributes from code elements
+      const dangerousAttrs = ["onclick", "onload", "onerror", "style"];
+      dangerousAttrs.forEach((attr) => {
+        if (element.hasAttribute(attr)) {
+          element.removeAttribute(attr);
+        }
+      });
+    }
+  });
+
+  return tempDiv.innerHTML;
+}
+
 // Initialize theme and load chat history on page load
 document.addEventListener("DOMContentLoaded", function () {
   loadTheme();
@@ -100,8 +175,31 @@ document.addEventListener("DOMContentLoaded", function () {
   // Restore chat history to UI
   if (chatHistory.length > 0) {
     chatHistory.forEach((message) => {
-      const messageElement = createMessageElement(message.sender);
-      messageElement.innerHTML = message.content;
+      try {
+        const messageElement = createMessageElement(message.sender);
+
+        if (message.sender === "bot") {
+          // For bot messages, parse markdown and sanitize
+          const parsedContent = marked.parse(message.content);
+          messageElement.innerHTML = sanitizeHTML(parsedContent);
+
+          // Re-apply syntax highlighting for code blocks
+          setTimeout(() => {
+            const codeBlocks = messageElement.querySelectorAll("pre code");
+            codeBlocks.forEach((block) => {
+              hljs.highlightElement(block);
+            });
+          }, 10);
+        } else {
+          // For user messages, just sanitize plain text
+          messageElement.innerText = message.content;
+        }
+      } catch (error) {
+        console.warn("Error loading message:", error);
+        // Create a fallback message
+        const messageElement = createMessageElement(message.sender);
+        messageElement.innerText = message.content || "Error loading message";
+      }
     });
     scrollToBottom();
   }
@@ -188,7 +286,8 @@ async function handleSend() {
     for await (const part of response) {
       if (part?.text) {
         fullReply += part.text;
-        botMsg.innerHTML = marked.parse(fullReply);
+        // Sanitize the content before displaying
+        botMsg.innerHTML = sanitizeHTML(marked.parse(fullReply));
         hljs.highlightAll();
 
         // Scroll to bottom after each update to ensure visibility
