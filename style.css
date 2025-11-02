@@ -1938,6 +1938,8 @@ body.dark-theme .user::before {
     top: 0;
     left: 0;
     height: 100vh;
+    transform: translateX(-100%);
+    width: 0;
   }
 }
 
