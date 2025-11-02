@@ -651,8 +651,6 @@ body.dark-theme .bot .table-wrapper::-webkit-scrollbar-thumb:hover {
   border-top: none;
   transition: background-color 0.3s ease;
   flex-shrink: 0;
-  position: sticky;
-  bottom: 0;
   z-index: 10;
   display: flex;
   justify-content: center;
@@ -1489,8 +1487,6 @@ body.dark-theme .bot .references-section a:hover {
   .input-area {
     padding: 10px 8px 12px;
     background: linear-gradient(to top, rgba(247,247,248,1) 85%, rgba(247,247,248,0));
-    position: sticky;
-    bottom: 0;
     z-index: 50;
     flex-shrink: 0;
   }
@@ -1647,8 +1643,6 @@ body.dark-theme .bot .references-section a:hover {
 
   .input-area {
     padding: 8px 6px 10px;
-    position: sticky;
-    bottom: 0;
     z-index: 50;
     flex-shrink: 0;
     background: linear-gradient(to top, rgba(247,247,248,1) 85%, rgba(247,247,248,0));
@@ -1747,7 +1741,7 @@ body.dark-theme .bot .references-section a:hover {
   max-width: 100%;
   margin: 0 auto;
   width: 100%;
-  padding: 24px 16px 160px;
+  padding: 24px 16px 20px;
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
@@ -1922,7 +1916,7 @@ body.dark-theme .image-download-btn:hover {
 
 /* Dark theme message styles */
 body.dark-theme .chat-container {
-  padding-bottom: 160px;
+  padding-bottom: 20px;
 }
 
 body.dark-theme .message {
@@ -2024,8 +2018,6 @@ body.dark-theme .user::before {
   
   .input-area {
     padding: 12px 8px 16px;
-    position: sticky;
-    bottom: 0;
     background: linear-gradient(to top, rgba(247,247,248,1) 85%, rgba(247,247,248,0));
     border-top: none;
     z-index: 50;
