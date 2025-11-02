@@ -9,6 +9,7 @@
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="style.css" />
     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-EHJEQXXBE8"></script>
@@ -21,28 +22,77 @@
 </script>
   </head>
   <body>
-    <div class="header">
-      <h1>
-        <a href="https://www.linkedin.com/in/aravind-aravind"
-          >Aravind's Gpt-4</a
-        >
-      </h1>
-      <div class="header-buttons">
-        <button class="clear-button" onclick="clearChat()" title="Clear Chat">
-          🗑️
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <button class="new-chat-btn" onclick="createNewChat()" title="New Chat">
+          <i class="fas fa-plus"></i> New Chat
         </button>
+        <button class="toggle-sidebar-btn" onclick="toggleSidebar()" title="Close Sidebar">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+      
+      <div class="conversations-list" id="conversations-list">
+        <!-- Conversations will be loaded here -->
+      </div>
+      
+      <div class="sidebar-footer">
         <button class="theme-toggle" onclick="toggleTheme()">
-          <span class="icon">🌙</span>
+          <i class="fas fa-moon icon"></i>
           <span class="text">Dark</span>
         </button>
       </div>
     </div>
 
-    <div class="chat-container" id="chat-container"></div>
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="header">
+        <div class="header-left">
+          <button class="toggle-sidebar-btn mobile-only" onclick="toggleSidebar()" title="Toggle Sidebar">
+            <i class="fas fa-bars"></i>
+          </button>
+          <h1>
+            <a href="https://www.linkedin.com/in/aravind-aravind"
+              >Aravind's GPT-5</a
+            >
+          </h1>
+        </div>
+        <div class="header-buttons">
+          <select class="model-selector" id="model-selector" title="Select AI Model">
+            <option value="gpt-5">GPT-5</option>
+            <option value="gpt-5-nano">GPT-5 Nano</option>
+            <option value="gpt-5-mini">GPT-5 Mini</option>
+            <option value="gpt-5-chat-latest">GPT-5 Chat Latest</option>
+          </select>
+          <button class="clear-button" onclick="clearChat()" title="Clear Chat">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      </div>
 
-    <div class="input-area">
-      <input type="text" id="user-input" placeholder="Type your message..." />
-      <button onclick="handleSend()">Send</button>
+      <div class="chat-container" id="chat-container"></div>
+
+      <div class="input-area">
+        <div class="input-wrapper">
+          <input type="file" id="image-upload" accept="image/*" multiple onchange="handleImageUpload(event)" aria-label="Upload images" />
+          <button class="attach-btn" onclick="document.getElementById('image-upload').click()" title="Attach images">
+            <i class="fas fa-plus"></i>
+          </button>
+          <div class="image-preview-container" id="image-preview-container"></div>
+          <div class="input-container">
+            <input type="text" id="user-input" placeholder="Ask anything" autocomplete="off" />
+            <div class="input-actions">
+              <button class="voice-input-btn" id="voice-input-btn" onclick="toggleVoiceInput()" title="Voice input">
+                <i class="fas fa-microphone"></i>
+              </button>
+              <button class="send-btn" onclick="handleSend()" aria-label="Send">
+                <i class="fas fa-arrow-up"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
