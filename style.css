@@ -1416,6 +1416,12 @@ body.dark-theme .bot .references-section a:hover {
     overflow: hidden;
     font-size: 16px;
   }
+  
+  .main-content {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
 
   .header {
     padding: 8px 10px;
@@ -1483,6 +1489,10 @@ body.dark-theme .bot .references-section a:hover {
   .input-area {
     padding: 10px 8px 12px;
     background: linear-gradient(to top, rgba(247,247,248,1) 85%, rgba(247,247,248,0));
+    position: sticky;
+    bottom: 0;
+    z-index: 50;
+    flex-shrink: 0;
   }
   
   .input-wrapper {
@@ -1637,6 +1647,11 @@ body.dark-theme .bot .references-section a:hover {
 
   .input-area {
     padding: 8px 6px 10px;
+    position: sticky;
+    bottom: 0;
+    z-index: 50;
+    flex-shrink: 0;
+    background: linear-gradient(to top, rgba(247,247,248,1) 85%, rgba(247,247,248,0));
   }
   
   .input-wrapper {
@@ -1682,6 +1697,11 @@ body.dark-theme .bot .references-section a:hover {
   .clear-button {
     padding: 4px 6px;
     font-size: 12px;
+  }
+  
+  /* Dark theme mobile input area */
+  body.dark-theme .input-area {
+    background: linear-gradient(to top, rgba(16,17,20,1) 85%, rgba(16,17,20,0));
   }
 }
 
@@ -1965,8 +1985,17 @@ body.dark-theme .user::before {
     box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
   }
   
+  .main-content {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
   .chat-container {
-    padding: 16px 12px 140px;
+    padding: 16px 12px 20px;
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 0;
   }
   
   .message {
@@ -1995,6 +2024,12 @@ body.dark-theme .user::before {
   
   .input-area {
     padding: 12px 8px 16px;
+    position: sticky;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(247,247,248,1) 85%, rgba(247,247,248,0));
+    border-top: none;
+    z-index: 50;
+    flex-shrink: 0;
   }
   
   .input-wrapper {
@@ -2098,5 +2133,10 @@ body.dark-theme .user::before {
   .clear-button {
     padding: 6px 10px;
     font-size: 14px;
+  }
+  
+  /* Dark theme mobile input area */
+  body.dark-theme .input-area {
+    background: linear-gradient(to top, rgba(16,17,20,1) 85%, rgba(16,17,20,0));
   }
 }
