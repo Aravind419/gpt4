@@ -27,6 +27,7 @@ body {
   flex-shrink: 0;
   overflow: hidden;
   z-index: 200;
+  min-height: 0;
 }
 
 .sidebar.hidden {
@@ -68,6 +69,7 @@ body:hover::before {
   border-bottom: 1px solid #e5e7eb;
   display: flex;
   gap: 8px;
+  flex-shrink: 0;
 }
 
 .new-chat-btn {
@@ -112,7 +114,10 @@ body:hover::before {
 .conversations-list {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 8px;
+  min-height: 0;
+  -webkit-overflow-scrolling: touch;
 }
 
 .conversation-item {
@@ -184,6 +189,7 @@ body:hover::before {
 .sidebar-footer {
   padding: 12px;
   border-top: 1px solid #e5e7eb;
+  flex-shrink: 0;
 }
 
 /* Main Content */
@@ -1977,7 +1983,29 @@ body.dark-theme .user::before {
     top: 0;
     left: 0;
     height: 100vh;
+    height: 100dvh; /* Dynamic viewport height for mobile browsers */
+    width: 260px;
+    display: flex;
+    flex-direction: column;
     z-index: 300;
+    overflow: hidden;
+  }
+  
+  .sidebar-header {
+    flex-shrink: 0;
+  }
+  
+  .conversations-list {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .sidebar-footer {
+    flex-shrink: 0;
+    padding: 12px max(12px, env(safe-area-inset-bottom));
   }
   
   .sidebar.hidden {
